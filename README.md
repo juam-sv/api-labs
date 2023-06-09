@@ -1,4 +1,4 @@
-# Flask REST API Example
+# Flask REST API Lab
 
 This is an example application showcasing a Flask REST API with authentication using JSON web tokens (JWT). The application provides several endpoints for user management, dashboard access, login, logoff, and generating reports.
 
