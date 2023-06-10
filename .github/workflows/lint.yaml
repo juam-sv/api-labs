@@ -1,15 +1,12 @@
-name: Python Lint Test
+name: Auto-format and Lint
 
 on:
   push:
     branches:
       - main
-  pull_request:
-    branches:
-      - main
 
 jobs:
-  lint:
+  auto-format-and-lint:
     name: Lint
     runs-on: ubuntu-latest
 
@@ -37,10 +34,12 @@ jobs:
         run: |
           git config --local user.email "actions@github.com"
           git config --local user.name "GitHub Actions"
-
-          git add app.py
+          git add .
           git commit -m "Auto-format code"
-
-          git remote set-url origin https://juam-sv:${{ env.TOKEN_GITHUB2 }}@github.com/juam-sv/chatgpt-labs.git
-
-          git push --set-upstream origin main
+        
+      - name: Push Changes
+        uses: actions-js/push@master
+        with:
+          github_token: ${{ secrets.TOKEN_GITHUB }}
+          repository: git@github.com:juam-sv/chatgpt-labs.git
+          branch: main
