@@ -23,7 +23,24 @@ jobs:
           python-version: 3.8
 
       - name: Install Dependencies
-        run: pip install flake8
+        run: |
+          pip install flake8
+          pip install autopep8
+
+      - name: Fix Code Formatting
+        run: autopep8 --in-place --recursive app.py
 
       - name: Lint Python Files
         run: flake8 app.py
+
+      - name: Commit Changes
+        run: |
+          git config --local user.email "actions@github.com"
+          git config --local user.name "GitHub Actions"
+
+          git add app.py
+          git commit -m "Auto-format code"
+          gh auth login --with-token ${{ secrets.TOKEN_GITHUB }}
+          gh pr create --base=juam-sv/chatgpt-labs:main --head=juam-sv/chatgpt-labs:main --title="Auto-format code" --body="Automatic code formatting using autopep8"
+
+          git push --set-upstream origin main

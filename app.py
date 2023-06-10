@@ -6,7 +6,7 @@ app = Flask(__name__)
 api = Api(app)
 
 # Dicionário simulando um banco de dados de usuários
-users = {
+users =     {
     "john": "password1",
     "jane": "password2"
 }
