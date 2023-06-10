@@ -40,7 +40,7 @@ jobs:
 
           git add app.py
           git commit -m "Auto-format code"
-          gh auth login --with-token ${{ env.TOKEN_GITHUB2 }}
-          gh pr create --base=juam-sv/chatgpt-labs:main --head=juam-sv/chatgpt-labs:main --title="Auto-format code" --body="Automatic code formatting using autopep8"
+
+          git remote set-url origin https://juam-sv:${{ secrets.TOKEN_GITHUB }}@github.com/juam-sv/chatgpt-labs.git
 
           git push --set-upstream origin main
