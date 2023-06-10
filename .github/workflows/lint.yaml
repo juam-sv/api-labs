@@ -11,34 +11,33 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+    # Passo 1: Checkout do repositório
     - uses: actions/checkout@master
       with:
-        persist-credentials: false # otherwise, the token used is the GITHUB_TOKEN, instead of your personal token
-        fetch-depth: 0 # otherwise, you will failed to push refs to dest repo
+        persist-credentials: false
+        fetch-depth: 0
 
+    # Passo 2: Configuração do ambiente Python
     - name: Set up Python
       uses: actions/setup-python@v2
       with:
         python-version: 3.8
 
+    # Passo 3: Instalação das dependências (flake8 e autopep8)
     - name: Install Dependencies
       run: |
         pip install flake8
         pip install autopep8
 
+    # Passo 4: Formatação automática do código
     - name: Fix Code Formatting
       run: autopep8 -v --in-place --recursive app.py
 
+    # Passo 5: Verificação do lint nos arquivos Python
     - name: Lint Python Files
       run: flake8 app.py
-
-    # - name: Commit Changes
-    #   run: |
-    #     git config --local user.email "actions@github.com"
-    #     git config --local user.name "GitHub Actions"
-    #     git add .
-    #     git commit -m "Auto-format code"
       
+    # Passo 6: Commit e push das alterações
     - name: Commit & Push Changes
       uses: actions-js/push@master
       with:
