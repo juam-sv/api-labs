@@ -32,12 +32,12 @@ jobs:
     - name: Lint Python Files
       run: flake8 app.py
 
-    - name: Commit Changes
-      run: |
-        git config --local user.email "actions@github.com"
-        git config --local user.name "GitHub Actions"
-        git add .
-        git commit -m "Auto-format code"
+    # - name: Commit Changes
+    #   run: |
+    #     git config --local user.email "actions@github.com"
+    #     git config --local user.name "GitHub Actions"
+    #     git add .
+    #     git commit -m "Auto-format code"
       
     - name: Commit & Push Changes
       uses: actions-js/push@master
