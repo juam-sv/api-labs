@@ -2,7 +2,7 @@
 
 [![Lint Pipeline](https://github.com/juam-sv/chatgpt-labs/actions/workflows/python-lint-test.yml/badge.svg)](https://github.com/juam-sv/chatgpt-labs/actions/workflows/python-lint-test.yml)
 
-This is an example application showcasing a Flask REST API with authentication using JSON web tokens (JWT). The application provides several endpoints for user management, dashboard access, login, logoff, and generating reports.
+This is an example application showcasing a Flask REST API with authentication using JSON web tokens (JWT). The application provides several endpoints for user management, dashboard access, login, logoff, generating reports, and retrieving the current time.
 
 ## Endpoints
 
@@ -41,6 +41,13 @@ This is an example application showcasing a Flask REST API with authentication u
 - **Authentication**: Token-based authentication is required.
 - **Description**: Retrieves a report.
 
+### Time Endpoint
+
+- **Endpoint**: `/time`
+- **Method**: GET
+- **Authentication**: No authentication required.
+- **Description**: Retrieves the current time.
+
 ## Running the Application
 
 To run the Flask application, follow these steps:
@@ -50,13 +57,13 @@ To run the Flask application, follow these steps:
 2. Build the Docker image by running the following command in the project directory:
 
    ```shell
-   docker build -t flask-api-example .
+   docker build -t flask-api-example:v1.0 .
    ```
 
 3. Start a Docker container from the built image:
 
    ```shell
-   docker run -p 5000:5000 -e SECRET_KEY=<your-secret-key> flask-api-example
+   docker run -p 5000:5000 -e SECRET_KEY=<your-secret-key> flask-api-example:v1.0
    ```
 
    Replace `<your-secret-key>` with your preferred secret key for JWT authentication.
@@ -73,10 +80,10 @@ You can use the following `curl` commands to test the endpoints:
    export TOKEN=$(curl -X POST -H "Content-Type: application/json" -d '{"username":"john", "password":"password1"}' http://localhost:5000/login | jq -r '.token')
    ```
 
-2. Make a request to the dashboard endpoint using the stored token:
+2. Make a request to the time endpoint using the stored token:
 
    ```shell
-   curl -X GET -H "Authorization: Bearer $TOKEN" http://localhost:5000/dashboard
+   curl -X GET -H "Authorization: Bearer $TOKEN" http://localhost:5000/time
    ```
 
 Feel free to modify the request parameters and payload according to your needs.
