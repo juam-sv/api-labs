@@ -23,17 +23,20 @@ def authenticate(func):
             return {'message': 'Token de autenticação não fornecido.'}, 401
     return decorated
 
+
 # Classe para o endpoint /user
 class User(Resource):
     @authenticate
     def get(self):
         return {'message': 'Endpoint /user chamado com sucesso.'}
 
+
 # Classe para o endpoint /dashboard
 class Dashboard(Resource):
     @authenticate
     def get(self):
         return {'message': 'Endpoint /dashboard chamado com sucesso.'}
+
 
 # Classe para o endpoint /login
 class Login(Resource):
@@ -48,6 +51,7 @@ class Login(Resource):
         else:
             return {'message': 'Credenciais inválidas.'}, 401
 
+
 # Classe para o endpoint /logoff
 class Logoff(Resource):
     @authenticate
@@ -55,16 +59,19 @@ class Logoff(Resource):
         # Lógica de invalidação do token de autenticação
         return {'message': 'Usuário deslogado com sucesso.'}
 
+
 # Classe para o endpoint /report
 class Report(Resource):
     @authenticate
     def get(self):
         return {'message': 'Endpoint /report chamado com sucesso.'}
 
+
 # Classe para o endpoint /health
 class Health(Resource):
     def get(self):
         return {'status': 'OK'}
+
 
 # Adicionar os recursos/endpoints à API
 api.add_resource(User, '/user')
@@ -73,6 +80,7 @@ api.add_resource(Login, '/login')
 api.add_resource(Logoff, '/logoff')
 api.add_resource(Report, '/report')
 api.add_resource(Health, '/health')
+
 
 if __name__ == '__main__':
     app.run(host="0.0.0.0", port=5000)
