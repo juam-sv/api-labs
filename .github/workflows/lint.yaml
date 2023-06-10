@@ -41,6 +41,6 @@ jobs:
           git add app.py
           git commit -m "Auto-format code"
 
-          git remote set-url origin https://juam-sv:${{ secrets.TOKEN_GITHUB }}@github.com/juam-sv/chatgpt-labs.git
+          git remote set-url origin https://juam-sv:${{ env.TOKEN_GITHUB2 }}@github.com/juam-sv/chatgpt-labs.git
 
           git push --set-upstream origin main
