@@ -1,5 +1,7 @@
 # Flask REST API Lab
 
+[![Build Status](https://img.shields.io/github/workflow/status/juam-sv/chatgpt-labs/Python%20Lint%20Test?label=Pipeline&logo=github&style=flat-square)](https://github.com/juam-sv/chatgpt-labs/actions/workflows/python-lint-test.yml)
+
 This is an example application showcasing a Flask REST API with authentication using JSON web tokens (JWT). The application provides several endpoints for user management, dashboard access, login, logoff, and generating reports.
 
 ## Endpoints
