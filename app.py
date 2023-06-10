@@ -46,13 +46,13 @@ class Dashboard(Resource):
 
 class Login(Resource):
     def post(self):
-            username = request.json.get('username')
-            password = request.json.get('password')
+        username = request.json.get('username')
+        password = request.json.get('password')
 
         if username in users and password == users[username]:
             # Lógica de geração do token de autenticação
             token = 'token_gerado_aqui'
-            return {'token': token}
+              return {'token': token}
         else:
             return {'message': 'Credenciais inválidas.'}, 401
 
