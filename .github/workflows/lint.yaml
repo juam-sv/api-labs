@@ -11,35 +11,37 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout Repository
-        uses: actions/checkout@v2
+    - uses: actions/checkout@master
+      with:
+        persist-credentials: false # otherwise, the token used is the GITHUB_TOKEN, instead of your personal token
+        fetch-depth: 0 # otherwise, you will failed to push refs to dest repo
 
-      - name: Set up Python
-        uses: actions/setup-python@v2
-        with:
-          python-version: 3.8
+    - name: Set up Python
+      uses: actions/setup-python@v2
+      with:
+        python-version: 3.8
 
-      - name: Install Dependencies
-        run: |
-          pip install flake8
-          pip install autopep8
+    - name: Install Dependencies
+      run: |
+        pip install flake8
+        pip install autopep8
 
-      - name: Fix Code Formatting
-        run: autopep8 -v --in-place --recursive app.py
+    - name: Fix Code Formatting
+      run: autopep8 -v --in-place --recursive app.py
 
-      - name: Lint Python Files
-        run: flake8 app.py
+    - name: Lint Python Files
+      run: flake8 app.py
 
-      - name: Commit Changes
-        run: |
-          git config --local user.email "actions@github.com"
-          git config --local user.name "GitHub Actions"
-          git add .
-          git commit -m "Auto-format code"
-        
-      - name: Push Changes
-        uses: actions-js/push@master
-        with:
-          github_token: ${{ secrets.TOKEN_GITHUB }}
-          repository: git@github.com:juam-sv/chatgpt-labs.git
-          branch: main
+    - name: Commit Changes
+      run: |
+        git config --local user.email "actions@github.com"
+        git config --local user.name "GitHub Actions"
+        git add .
+        git commit -m "Auto-format code"
+      
+    - name: Commit & Push Changes
+      uses: actions-js/push@master
+      with:
+        github_token: ${{ secrets.TOKEN_GITHUB }}
+        repository: git@github.com:juam-sv/chatgpt-labs.git
+        branch: main
