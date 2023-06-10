@@ -52,7 +52,7 @@ class Login(Resource):
         if username in users and password == users[username]:
             # Lógica de geração do token de autenticação
             token = 'token_gerado_aqui'
-              return {'token': token}
+            return {'token': token}
         else:
             return {'message': 'Credenciais inválidas.'}, 401
 
