@@ -12,6 +12,8 @@ users = {
 }
 
 # Função para verificar o token de autenticação
+
+
 def authenticate(func):
     @wraps(func)
     def decorated(*args, **kwargs):
