@@ -12,6 +12,8 @@ users = {
 }
 
 # Função para verificar o token de autenticação
+
+
 def authenticate(func):
     @wraps(func)
     def decorated(*args, **kwargs):
@@ -24,18 +26,24 @@ def authenticate(func):
     return decorated
 
 # Classe para o endpoint /user
+
+
 class User(Resource):
     @authenticate
     def get(self):
         return {'message': 'Endpoint /user chamado com sucesso.'}
 
 # Classe para o endpoint /dashboard
+
+
 class Dashboard(Resource):
     @authenticate
     def get(self):
         return {'message': 'Endpoint /dashboard chamado com sucesso.'}
 
 # Classe para o endpoint /login
+
+
 class Login(Resource):
     def post(self):
         username = request.json.get('username')
@@ -49,6 +57,8 @@ class Login(Resource):
             return {'message': 'Credenciais inválidas.'}, 401
 
 # Classe para o endpoint /logoff
+
+
 class Logoff(Resource):
     @authenticate
     def post(self):
@@ -56,15 +66,20 @@ class Logoff(Resource):
         return {'message': 'Usuário deslogado com sucesso.'}
 
 # Classe para o endpoint /report
+
+
 class Report(Resource):
     @authenticate
     def get(self):
         return {'message': 'Endpoint /report chamado com sucesso.'}
 
 # Classe para o endpoint /health
+
+
 class Health(Resource):
     def get(self):
         return {'status': 'OK'}
+
 
 # Adicionar os recursos/endpoints à API
 api.add_resource(User, '/user')
