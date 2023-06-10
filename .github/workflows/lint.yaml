@@ -43,5 +43,5 @@ jobs:
       uses: actions-js/push@master
       with:
         github_token: ${{ secrets.TOKEN_GITHUB }}
-        repository: git@github.com:juam-sv/chatgpt-labs.git
+        repository: juam-sv/chatgpt-labs.git
         branch: main
