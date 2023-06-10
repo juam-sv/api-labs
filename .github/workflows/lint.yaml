@@ -25,7 +25,7 @@ jobs:
           pip install autopep8
 
       - name: Fix Code Formatting
-        run: autopep8 --in-place --recursive app.py
+        run: autopep8 -v --in-place --recursive app.py
 
       - name: Lint Python Files
         run: flake8 app.py
@@ -40,6 +40,6 @@ jobs:
       - name: Push Changes
         uses: actions-js/push@master
         with:
-          github_token: ${{ secrets.TOKEN_GITHUB }}
+          github_token: ${{ env.TOKEN_GITHUB2 }}
           repository: git@github.com:juam-sv/chatgpt-labs.git
           branch: main
