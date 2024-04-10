@@ -5,8 +5,8 @@ on:
     branches:
       - main
       - feat/pipeline
-    paths:
-      - app.py
+    # paths:
+    #   - app.py
 env:
   DOCKER_REPOSITORY: juamsv/api-labs
   EKS_CLUSTER_NAME: cluster1
