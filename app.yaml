@@ -1,0 +1,63 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: api-labs
+  labels:
+    app: api-labs
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: api-labs
+  template:
+    metadata:
+      labels:
+        app: api-labs
+    spec:
+      containers:
+      - name: api-labs
+        image: juamsv/api-labs:latest
+        ports:
+        - containerPort: 5000
+        resources:
+          requests:
+            cpu: "100m"
+            memory: "64Mi"
+          limits:
+            cpu: "200m"
+            memory: "128Mi"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: external-api-labs-service
+  annotations:
+    service.beta.kubernetes.io/aws-load-balancer-type: nlb
+    service.beta.kubernetes.io/aws-load-balancer-cross-zone-load-balancing-enabled: 'true'
+spec:
+  selector:
+    app: api-labs
+  type: LoadBalancer
+  ports:
+    - protocol: TCP
+      port: 5000
+---
+apiVersion: autoscaling/v2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: api-labs
+  namespace: default
+spec:
+  maxReplicas: 10
+  minReplicas: 1
+  metrics:
+  - resource:
+      name: cpu
+      target:
+        averageUtilization: 20
+        type: Utilization
+    type: Resource
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: api-labs
