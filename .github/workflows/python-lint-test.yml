@@ -23,32 +23,40 @@ jobs:
         persist-credentials: false
         fetch-depth: 0
 
+    # Essencial pra gerar um valor único baseado no inicio do hash do commit que irá ser usado para referenciar 
+    # a nova imagem da aplicação nos proximos processos do pipe
     - name: Set short git commit SHA
       id: commit
       uses: prompt/actions-commit-hash@v2
 
+    # Configuração do ambiente do python para rodar os testes
     - name: Set up Python
       uses: actions/setup-python@v2
       with:
         python-version: 3.8
 
+    # Dependencia pra rodar o lint
     - name: Install Dependencies
       run: |
         pip install flake8
         pip install autopep8
 
+    # Correção da formatação do código
     - name: Fix Code Formatting
       run: autopep8 -v --in-place --recursive app.py
-
+    
+    # Lint em questão.
     - name: Lint Python Files
       run: flake8 app.py
 
+    # Subir as alterações para o repo com o skip ci pra não criar um loop na pipe
     - name: Commit & Push Changes
       uses: actions-js/push@master
       with:
         github_token: ${{ secrets.TOKEN_GITHUB }}
         repository: juam-sv/api-labs
         branch: main
+        message: '[skip ci] - chore: autopublish ${date}'
 
     - name: Login to Docker Hub
       uses: docker/login-action@v3
@@ -56,6 +64,7 @@ jobs:
         username: ${{ secrets.DOCKER_USERNAME }}
         password: ${{ secrets.DOCKER_PASSWORD }}
     
+    # O Build é essencial para o empacotamento de uma aplicação facilitando a escalabilidade horizontal.
     - name: Build, tag, and push image
       env:
         DOCKER_REPO: ${{ env.DOCKER_REPOSITORY }}
@@ -64,22 +73,24 @@ jobs:
         docker build -t $DOCKER_REPO:$IMAGE_TAG -f Dockerfile .
         docker push $DOCKER_REPO:$IMAGE_TAG
 
+    # Scan de vulnerabilidade com trivy, essencial pra identificar as vulnerabilidade/CVEs mais comuns.
     - name: Run Trivy vulnerability scanner
       uses: aquasecurity/trivy-action@master
       with:
         image-ref: 'docker.io/${{ env.DOCKER_REPOSITORY }}:${{ steps.commit.outputs.short }}'
         format: 'table'
-        # exit-code: '1'
         ignore-unfixed: true
         vuln-type: 'os,library'
         severity: 'CRITICAL,HIGH'
 
-    # - name: Update kube config
-    #   run: aws eks update-kubeconfig --name $EKS_CLUSTER_NAME --region $AWS_REGION
+    # Autenticação no EKS
+    - name: Update kube config
+      run: aws eks update-kubeconfig --name $EKS_CLUSTER_NAME --region $AWS_REGION
 
-    # - name: Deploy to EKS
-    #   env:
-    #     IMAGE_TAG: ${{ steps.commit.outputs.short }}
-    #   run: |
-    #       sed -i "s|image: juamsv/api-labs:latest|image: juamsv/api-labs:$IMAGE_TAG|" app.yaml && \
-    #       kubectl apply -f app.yaml
+    # Deploy da aplicação em questão.
+    - name: Deploy to EKS
+      env:
+        IMAGE_TAG: ${{ steps.commit.outputs.short }}
+      run: |
+          sed -i "s|image: juamsv/api-labs:latest|image: juamsv/api-labs:$IMAGE_TAG|" app.yaml && \
+          kubectl apply -f app.yaml
