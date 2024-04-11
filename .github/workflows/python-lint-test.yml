@@ -27,53 +27,53 @@ jobs:
       id: commit
       uses: prompt/actions-commit-hash@v2
 
-    # - name: Set up Python
-    #   uses: actions/setup-python@v2
-    #   with:
-    #     python-version: 3.8
+    - name: Set up Python
+      uses: actions/setup-python@v2
+      with:
+        python-version: 3.8
 
-    # - name: Install Dependencies
-    #   run: |
-    #     pip install flake8
-    #     pip install autopep8
+    - name: Install Dependencies
+      run: |
+        pip install flake8
+        pip install autopep8
 
-    # - name: Fix Code Formatting
-    #   run: autopep8 -v --in-place --recursive app.py
+    - name: Fix Code Formatting
+      run: autopep8 -v --in-place --recursive app.py
 
-    # - name: Lint Python Files
-    #   run: flake8 app.py
+    - name: Lint Python Files
+      run: flake8 app.py
 
-    # - name: Commit & Push Changes
-    #   uses: actions-js/push@master
-    #   with:
-    #     github_token: ${{ secrets.TOKEN_GITHUB }}
-    #     repository: juam-sv/api-labs
-    #     branch: main
+    - name: Commit & Push Changes
+      uses: actions-js/push@master
+      with:
+        github_token: ${{ secrets.TOKEN_GITHUB }}
+        repository: juam-sv/api-labs
+        branch: main
 
-    # - name: Login to Docker Hub
-    #   uses: docker/login-action@v3
-    #   with:
-    #     username: ${{ secrets.DOCKER_USERNAME }}
-    #     password: ${{ secrets.DOCKER_PASSWORD }}
+    - name: Login to Docker Hub
+      uses: docker/login-action@v3
+      with:
+        username: ${{ secrets.DOCKER_USERNAME }}
+        password: ${{ secrets.DOCKER_PASSWORD }}
     
-    # - name: Build, tag, and push image
-    #   env:
-    #     DOCKER_REPO: ${{ env.DOCKER_REPOSITORY }}
-    #     IMAGE_TAG: ${{ steps.commit.outputs.short }}
-    #   run: |
-    #     docker build -t $DOCKER_REPO:$IMAGE_TAG -f Dockerfile .
-    #     docker push $DOCKER_REPO:$IMAGE_TAG
+    - name: Build, tag, and push image
+      env:
+        DOCKER_REPO: ${{ env.DOCKER_REPOSITORY }}
+        IMAGE_TAG: ${{ steps.commit.outputs.short }}
+      run: |
+        docker build -t $DOCKER_REPO:$IMAGE_TAG -f Dockerfile .
+        docker push $DOCKER_REPO:$IMAGE_TAG
 
     - name: Run Trivy vulnerability scanner
       uses: aquasecurity/trivy-action@master
       with:
-        image-ref: 'docker.io/${{ env.DOCKER_REPOSITORY }}:908b993'
-        # image-ref: 'docker.io/${{ env.DOCKER_REPOSITORY }}:${{ steps.commit.outputs.short }}'
+        image-ref: 'docker.io/${{ env.DOCKER_REPOSITORY }}:${{ steps.commit.outputs.short }}'
         format: 'table'
         # exit-code: '1'
         ignore-unfixed: true
         vuln-type: 'os,library'
         severity: 'CRITICAL,HIGH'
+
     # - name: Update kube config
     #   run: aws eks update-kubeconfig --name $EKS_CLUSTER_NAME --region $AWS_REGION
 
